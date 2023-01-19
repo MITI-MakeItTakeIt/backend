@@ -1,6 +1,6 @@
 from rest_framework.fields import CharField
 
-from .validators import PasswordValidator
+from .custom_validators import PasswordValidator
 
 
 class PasswordField(CharField):
