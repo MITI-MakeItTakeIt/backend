@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Application definition
 DJANGO_APPS = [
-    
+    "users",
 ]
 
 DEPENDENCIES = [
