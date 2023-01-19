@@ -26,7 +26,7 @@ DJANGO_APPS = [
 ]
 
 DEPENDENCIES = [
-    
+    "rest_framework",
 ]
 
 INSTALLED_APPS = [
