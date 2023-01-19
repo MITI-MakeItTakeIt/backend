@@ -87,6 +87,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# DJANGO_REST_FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'utils.custom_renderers.CustomBaseRenderer'  
+    ],
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
