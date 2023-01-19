@@ -6,7 +6,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 class UserManager(BaseUserManager):
     use_for_related_fields = True
     
-    def create_user(self, email=None, nickname=None, password=None):
+    def create_user(self, email=None, nickname=None, password=None, **kwargs):
         if not email:
             raise ValueError('이메일은 필수 입력 사항입니다.')
         if not nickname:
@@ -18,8 +18,8 @@ class UserManager(BaseUserManager):
         user.save()
         return user
             
-    def create_superuser(self, email=None, nickname=None, password=None):
-        user = self.create_user(email=email, nickname=nickname, password=password)
+    def create_superuser(self, email=None, nickname=None, password=None, **kwargs):
+        user = self.create_user(email=email, nickname=nickname, password=password, **kwargs)
         user.is_staff = True
         user.save()
         return user
@@ -37,5 +37,6 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True)
     
-    USERNAME_FIELD = 'email'    
+    USERNAME_FIELD = 'email'
+    
     objects = UserManager()
