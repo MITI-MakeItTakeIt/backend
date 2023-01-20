@@ -10,10 +10,6 @@ class UserListView(views.APIView):
     
     def post(self, request):
         serializer = UserBaseSerializer(data=request.data)
-        
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(
-                serializer.data,
-                statu = status.HTTP_201_CREATED
-            )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
