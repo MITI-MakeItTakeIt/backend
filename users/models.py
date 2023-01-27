@@ -32,7 +32,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True, null=False)
     nickname = models.CharField(max_length=50, unique=True, null=False)
     is_staff = models.BooleanField(default=False)
-    is_activated = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True)
