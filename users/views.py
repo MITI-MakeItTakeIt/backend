@@ -1,7 +1,8 @@
 from rest_framework import status, views
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 
 from utils.user_activate_token_generator import user_activation_token
 from utils.custom_emails import UserActivationEmail
@@ -27,4 +28,25 @@ class UserListView(views.APIView):
             serializer.data,
             status = status.HTTP_201_CREATED
         )
+        
+    
+class UserActivateView(views.APIView):
+    
+    # TODO: request method 변경 예정
+    def get(self, request, uidb64, token):
+        try:
+            uid = int(force_str(urlsafe_base64_decode(uidb64)))
+        except DjangoUnicodeDecodeError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        user = get_user_model().objects.filter(pk=uid).first()
+
+        # TODO: 발생 예외 정리 및 구현, 예외 처리
+        if user is not None and user_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
         
