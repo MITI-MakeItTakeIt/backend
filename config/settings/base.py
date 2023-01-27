@@ -118,3 +118,6 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+
+USER_ACTIVATION_EMAIL_TIMEOUT = 1*24*60*60
