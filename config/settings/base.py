@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import os
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,11 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Application definition
 DJANGO_APPS = [
-    
+    "users",
 ]
 
 DEPENDENCIES = [
-    
+    "rest_framework",
 ]
 
 INSTALLED_APPS = [
@@ -87,6 +90,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# DJANGO_REST_FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'utils.custom_renderers.CustomBaseRenderer'  
+    ],
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -109,3 +119,15 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.User"
+
+
+EMAIL_HOST = os.environ.get("MITI_EMAIL_HOST")
+EMAIL_PORT = os.environ.get("MITI_EMAIL_PORT")
+EMAIL_HOST_USER = os.environ.get("MITI_EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("MITI_EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+USER_ACTIVATION_EMAIL_TIMEOUT = 1*24*60*60
