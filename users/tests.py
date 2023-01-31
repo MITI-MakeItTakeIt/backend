@@ -30,18 +30,20 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenNonexistingUserNickname_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-nickname-check')
-        data = {
-            "nickname" : "NonExistingNickname",
-        }
-        
+        url = reverse('user-info-check') + "?type=checkNickname&key=nonExistingNickname"
+
         # when
-        response = self.client.post(url, data=data, format='json')
+        response = self.client.get(url, format='json')
         
         # then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('status_code', response.json())
-        self.assertIn('message', response.json())
-        self.assertIn('data', response.json())
-        self.assertIn('nickname', response.json()['data'])
-        self.assertEqual("사용 가능한 닉네임입니다.", response.json()['data']['nickname'])
+        self.assertIn('is_available', response_data['data'])
+        self.assertEqual(1, response_data['data']['is_available'])
+        self.assertIn('message', response_data['data'])
+        self.assertEqual("사용 가능한 닉네임입니다.", response_data['data']['message'])
+
+        
+        # when
+        
+        # then
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
