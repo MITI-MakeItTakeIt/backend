@@ -15,7 +15,7 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenNonexistingUserEmail_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkEmail&key=nonExistingEmail@user.com"
+        url = reverse('user-info-check') + "?key=email&value=nonExistingEmail@user.com"
         
         # when
         response = self.client.get(url, format='json')
@@ -30,7 +30,7 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenNonexistingUserNickname_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkNickname&key=nonExistingNickname"
+        url = reverse('user-info-check') + "?key=nickname&value=nonExistingNickname"
 
         # when
         response = self.client.get(url, format='json')
@@ -44,7 +44,7 @@ class UserInfoCheckAPITest(APITestCase):
 
     def test_givenExistingEmail_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkEmail&key=TestUser@Testuser.com"
+        url = reverse('user-info-check') + "?key=email&value=TestUser@Testuser.com"
         
         # when
         response = self.client.get(url, format='json')
@@ -59,7 +59,7 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenExistingNickname_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkNickname&key=Testuser"
+        url = reverse('user-info-check') + "?key=nickname&value=Testuser"
 
         # when
         response = self.client.get(url, format='json')
@@ -75,7 +75,7 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenInvalidEmail_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkEmail&key=invalidemailform.com"
+        url = reverse('user-info-check') + "?key=email&value=invalidemailform.com"
         
         # when
         response = self.client.get(url, format='json')
@@ -90,7 +90,7 @@ class UserInfoCheckAPITest(APITestCase):
         
     def test_givenInvalidNickname_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-info-check') + "?type=checkNickname&key=INVALID_USER!^"
+        url = reverse('user-info-check') + "?key=nickname&value=INVALID_USER!^"
 
         # when
         response = self.client.get(url, format='json')
