@@ -73,7 +73,18 @@ class UserInfoCheckAPITest(APITestCase):
         self.assertEqual("사용중인 닉네임입니다.", response_data['data']['message'])
     
     
+    def test_givenInvalidEmail_whenCheckUserInfo_thenReturn200(self):
+        # given
+        url = reverse('user-info-check') + "?type=checkEmail&key=invalidemailform.com"
+        
         # when
+        response = self.client.get(url, format='json')
+        response_data = response.json()
         
         # then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('is_available', response_data['data'])
+        self.assertEqual(0, response_data['data']['is_available'])
+        self.assertIn('message', response_data['data'])
+        self.assertEqual("유효한 이메일이 아닙니다.", response_data['data']['message'])
+        
