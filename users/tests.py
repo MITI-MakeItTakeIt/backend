@@ -7,7 +7,6 @@ from rest_framework.test import APITestCase
 
 class UserInfoCheckAPITest(APITestCase):
     def setUp(self):
-        print("\n setup is called")
         get_user_model().objects.create(
             email="TestUser@Testuser.com",
             nickname="Testuser",
@@ -16,21 +15,18 @@ class UserInfoCheckAPITest(APITestCase):
     
     def test_givenNonexistingUserEmail_whenCheckUserInfo_thenReturn200(self):
         # given
-        url = reverse('user-email-check')
-        data = {
-            "email" : "TestUser@nonexistingemail.com",
-        }
+        url = reverse('user-info-check') + "?type=checkEmail&key=nonExistingEmail@user.com"
         
         # when
-        response = self.client.post(url, data=data, format='json')
+        response = self.client.get(url, format='json')
+        response_data = response.json()
         
         # then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('status_code', response.json())
-        self.assertIn('message', response.json())
-        self.assertIn('data', response.json())
-        self.assertIn('email', response.json()['data'])
-        self.assertEqual("사용 가능한 이메일입니다.", response.json()['data']['email'])
+        self.assertIn('is_available', response_data['data'])
+        self.assertEqual(1, response_data['data']['is_available'])
+        self.assertIn('message', response_data['data'])
+        self.assertEqual("사용 가능한 이메일입니다.", response_data['data']['message'])
     
     def test_givenNonexistingUserNickname_whenCheckUserInfo_thenReturn200(self):
         # given
