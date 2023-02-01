@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from utils.custom_fields import PasswordField
 
@@ -21,3 +22,17 @@ class UserBaseSerializer(serializers.ModelSerializer):
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
     
+
+class UserInfoCheckSerializer(serializers.Serializer):
+    email = serializers.EmailField(
+        required=False, validators=[UniqueValidator(queryset=get_user_model().objects.all())])
+    nickname = serializers.CharField(
+        required=False, validators=[UniqueValidator(queryset=get_user_model().objects.all())])
+    
+    _valid_fields = ('email', 'nickname')
+    
+    def validate(self, attrs):
+        for field in self._valid_fields:
+            if field in attrs:
+                return {field: attrs[field]}
+        raise serializers.ValidationError("email 혹은 nickname이 반드시 입력되어야 합니다.")    
