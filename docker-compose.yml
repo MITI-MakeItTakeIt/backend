@@ -21,8 +21,8 @@ services:
     depends_on:
       - db
     entrypoint: /entrypoint.sh
-    volumes:
-      - staticfiles:/backend/staticfiles
+    # volumes:
+    #   - staticfiles: /backend/staticfiles
     command:
       - bash
       - -c
