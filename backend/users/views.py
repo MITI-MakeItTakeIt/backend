@@ -23,7 +23,7 @@ class UserListView(views.APIView):
         
         # TODO: 비동기 처리
         email = UserActivationEmail(uidb64, token, to=[user.email,])
-        email.send()
+        # email.send()
         return Response(
             serializer.data,
             status = status.HTTP_201_CREATED
