@@ -275,5 +275,6 @@ pip-selfcheck.json
 backend/config/settings/dev.py
 backend/config/settings/*.env
 myvenv/
-backend/*/migrations/
+backend/*/migrations/*
+!backend/*/migrations/__init__.py
 
