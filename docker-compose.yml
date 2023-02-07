@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - ./backend/config/settings/deploy.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_volume:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - db
+    entrypoint: /entrypoint.sh
+    volumes:
+      - backend_volume:/backend
+      - staticfiles:/backend/staticfiles
+    command:
+      - bash
+      - -c
+      - |
+        python manage.py runserver 0.0.0.0:8000 --settings=config.settings.deploy
+
+volumes:
+  mysql_volume:
+  backend_volume:
+  staticfiles:
