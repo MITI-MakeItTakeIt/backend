@@ -1,5 +1,5 @@
 version: "3.9"
-   
+
 services:
   db:
     image: mysql:8.0
@@ -8,12 +8,12 @@ services:
     env_file:
       - ./backend/config/settings/deploy.env
     ports:
-      - "3366:3306"
+      - "3306:3306"
     volumes:
       - mysql_volume:/var/lib/mysql
-  
+
   backend:
-    build: 
+    build:
       context: ./backend
     ports:
       - "8000:8000"
@@ -21,16 +21,16 @@ services:
     depends_on:
       - db
     entrypoint: /entrypoint.sh
-    # volumes:
-    #   - staticfiles: /backend/staticfiles
+    volumes:
+      - backend_volume:/backend
+      - staticfiles:/backend/staticfiles
     command:
       - bash
       - -c
       - |
         python manage.py runserver 0.0.0.0:8000 --settings=config.settings.deploy
 
-
-
 volumes:
   mysql_volume:
+  backend_volume:
   staticfiles:
