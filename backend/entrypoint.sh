@@ -4,9 +4,12 @@
 echo "Collect static files"
 python3 manage.py collectstatic --no-input
 
-echo "migrate db"
+echo "Wait until DB container is ready"
+dockerize -wait tcp ://db:3306 -timeout 20s
+
+echo "Migrate db"
 python3 manage.py makemigrations
-python3 manage.py migrate 
+python3 manage.py migrate --no-input
 
 # Start server
 echo "Starting server"
