@@ -272,5 +272,9 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,django
 
-config/settings/dev.py
-*/migrations/
+backend/config/settings/dev.py
+backend/config/settings/*.env
+myvenv/
+backend/*/migrations/*
+!backend/*/migrations/__init__.py
+
