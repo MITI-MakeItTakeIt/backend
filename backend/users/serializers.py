@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from utils.custom_fields import PasswordField
+from utils.custom_validators import PasswordValidator
 
 
 class UserBaseSerializer(serializers.ModelSerializer):
@@ -36,3 +37,12 @@ class UserInfoCheckSerializer(serializers.Serializer):
             if field in attrs:
                 return {field: attrs[field]}
         raise serializers.ValidationError("email 혹은 nickname이 반드시 입력되어야 합니다.")    
+
+
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, write_only=True)
+    password = serializers.CharField(required=True, write_only=True, validators=[PasswordValidator(),])
+    
+    def is_logginable(self, user):
+        return user.is_loginnable_user()
+    
