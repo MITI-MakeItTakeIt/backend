@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 import os
 import environ
@@ -31,6 +32,7 @@ DJANGO_APPS = [
 
 DEPENDENCIES = [
     "rest_framework",
+    "rest_framework_simplejwt",
 ]
 
 INSTALLED_APPS = [
@@ -96,6 +98,15 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'utils.custom_renderers.CustomBaseRenderer'  
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+# JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
 }
 
 
