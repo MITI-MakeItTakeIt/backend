@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from utils.custom_fields import PasswordField
 from utils.custom_validators import PasswordValidator
+from utils.custom_exceptions import UnactivatedUserDenied
 
 
 class UserBaseSerializer(serializers.ModelSerializer):
@@ -61,3 +62,21 @@ class UserLoginSerializer(serializers.Serializer):
             attrs['token'] = TokenObtainPairSerializer.get_token(user)
         
         return attrs
+    
+    def to_representation(self, data):
+        user = data.get('user', None)
+        refresh_token = data.get('token', None)
+
+        if user and refresh_token:
+            return {
+                "data": {
+                    'email': user.email,
+                    'nickname': user.nickname
+                },
+                'token': {
+                    'aceess': str(refresh_token.access_token),
+                    'refresh': str(refresh_token)   
+                }
+            }
+            
+        raise UnactivatedUserDenied()
