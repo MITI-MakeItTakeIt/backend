@@ -1,8 +1,12 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from utils.custom_fields import PasswordField
+from utils.custom_validators import PasswordValidator
+from utils.custom_exceptions import UnactivatedUserDenied
 
 
 class UserBaseSerializer(serializers.ModelSerializer):
@@ -36,3 +40,43 @@ class UserInfoCheckSerializer(serializers.Serializer):
             if field in attrs:
                 return {field: attrs[field]}
         raise serializers.ValidationError("email 혹은 nickname이 반드시 입력되어야 합니다.")    
+
+
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, write_only=True)
+    password = serializers.CharField(required=True, write_only=True, validators=[PasswordValidator(),])
+    
+    def is_logginable(self, user):
+        return user.is_loginnable_user()
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        user = authenticate(email=email, password=password)
+        
+        if user is None:
+            raise AuthenticationFailed("일치하는 회원 정보가 없습니다.")
+
+        if self.is_logginable(user):
+            attrs['user'] = user
+            attrs['token'] = TokenObtainPairSerializer.get_token(user)
+        
+        return attrs
+    
+    def to_representation(self, data):
+        user = data.get('user', None)
+        refresh_token = data.get('token', None)
+
+        if user and refresh_token:
+            return {
+                "data": {
+                    'email': user.email,
+                    'nickname': user.nickname
+                },
+                'token': {
+                    'aceess': str(refresh_token.access_token),
+                    'refresh': str(refresh_token)   
+                }
+            }
+            
+        raise UnactivatedUserDenied()

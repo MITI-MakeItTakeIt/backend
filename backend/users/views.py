@@ -63,3 +63,15 @@ class UserInfoCheckView(views.APIView):
             response_data.response,
             status = status.HTTP_200_OK
         )
+
+
+class UserLoginView(views.APIView):
+    
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(
+            serializer.data,
+            status = status.HTTP_200_OK
+        )
+        
