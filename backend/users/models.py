@@ -39,5 +39,28 @@ class User(AbstractBaseUser):
     deleted_at = models.DateTimeField(null=True)
     
     USERNAME_FIELD = 'email'
+    POSITIVE_REQUIRED_FIELD_TO_LOGIN = (is_active, )
+    NEGATIVE_REQUIRED_FIELDS_TO_LOGIN = (deleted_at, )
     
     objects = UserManager()
+    
+    def check_positive_required_fields(self):
+        for field in self.POSITIVE_REQUIRED_FIELD_TO_LOGIN:
+            value = getattr(self, field.name)
+            if value is None or not value:
+                return False
+        return True
+    
+    def check_negative_required_fields(self):
+        for field in self.NEGATIVE_REQUIRED_FIELDS_TO_LOGIN:
+            value = getattr(self, field.name)
+            if value:
+                return False
+        return True
+    
+    def is_loginnable_user(self):
+        if (self.check_positive_required_fields() 
+            and self.check_negative_required_fields()):
+            return True
+        return False
+            
