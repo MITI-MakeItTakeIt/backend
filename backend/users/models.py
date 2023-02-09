@@ -14,6 +14,7 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError('비밀번호는 필수 입력 사항입니다.')
         user = self.model(email=self.normalize_email(email), nickname=nickname)
+        user.is_active = True                       ## 현재 이메일 서버 오류로 신규 가입자 모두 활성화 -> 환경 설정 후 삭제
         user.set_password(password)
         user.save()
         return user
