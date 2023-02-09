@@ -1,6 +1,8 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from utils.custom_fields import PasswordField
 from utils.custom_validators import PasswordValidator
@@ -46,3 +48,16 @@ class UserLoginSerializer(serializers.Serializer):
     def is_logginable(self, user):
         return user.is_loginnable_user()
     
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        user = authenticate(email=email, password=password)
+        
+        if user is None:
+            raise AuthenticationFailed("일치하는 회원 정보가 없습니다.")
+
+        if self.is_logginable(user):
+            attrs['user'] = user
+            attrs['token'] = TokenObtainPairSerializer.get_token(user)
+        
+        return attrs
