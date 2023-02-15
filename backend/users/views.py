@@ -1,5 +1,6 @@
 from rest_framework import status, views
 from rest_framework.response import Response
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
@@ -74,4 +75,25 @@ class UserLoginView(views.APIView):
             serializer.data,
             status = status.HTTP_200_OK
         )
+
+
+class SocialLoginView(views.APIView):
+    valid_social = ('kakao',)
+    
+    client_id = getattr(settings, 'KAKAO_REST_API_KEY')
+    urls = getattr(settings, 'MITI_URLS')
+    authorize_url = urls['KAKAO']['AUTHORIZE']
+    redirect_uri = urls['CALLBACK']['KAKAO']['LOGIN_REDIRECT_URI']
+            
+    def get(self, request):
+        social_service = request.GET.get('provider', None)
+        
+        if social_service not in self.valid_social:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(
+            data = {'login_url': self.authorize_url%(self.client_id, self.redirect_uri)},
+            status = status.HTTP_200_OK
+        )
+        
         
