@@ -15,6 +15,7 @@ ALLOWED_HOSTS = [
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
+KAKAO_REST_API_KEY = env("KAKAO_REST_API_KEY")
 
 DATABASES = {
     "default": {
