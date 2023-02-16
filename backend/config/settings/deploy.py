@@ -30,16 +30,3 @@ DATABASES = {
 
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = os.path.join(BASE_DIR.parent, 'staticfiles')
-
-
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": ,
-#         "NAME": os.environ.get("DB_NAME"),
-#         "HOST": os.environ.get("RDS_HOST"),
-#         "PORT": os.environ.get("RDS_PORT"),
-#         "USER": os.environ.get("RDS_USER"),
-#         "PASSWORD": os.environ.get("RDS_PASSWORD"),
-#     }
-# }
