@@ -110,6 +110,21 @@ SIMPLE_JWT = {
 }
 
 
+MITI_URLS = {
+    'MITI_DOMAIN': 'http://3.34.46.148',
+    'KAKAO': {
+        'AUTHORIZE': 'https://kauth.kakao.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code',
+        'TOKEN': 'https://kauth.kakao.com/oauth/token',
+        'USER_INFO': 'https://kapi.kakao.com/v2/user/me'
+    },
+    'CALLBACK': {
+        'KAKAO': {
+            'LOGIN_REDIRECT_URI': 'http://3.34.46.148/users/callback/login/',
+        },
+    },
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

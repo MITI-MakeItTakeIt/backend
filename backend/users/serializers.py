@@ -64,12 +64,16 @@ class UserLoginSerializer(serializers.Serializer):
         return attrs
     
     def to_representation(self, data):
-        user = data.get('user', None)
-        refresh_token = data.get('token', None)
+        if self.instance is None:
+            user = data.get('user', None)
+            refresh_token = data.get('token', None)
+        else:
+            user = self.instance
+            refresh_token = TokenObtainPairSerializer.get_token(user)
 
         if user and refresh_token:
             return {
-                "data": {
+                "user": {
                     'email': user.email,
                     'nickname': user.nickname
                 },
