@@ -18,6 +18,15 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+    
+    def create_social_user(self, email=None, nickname=None):
+        if not email:
+            raise ValueError('이메일은 필수 입력 사항입니다.')
+        nickname = "Kakao" + nickname
+        user = self.model(email=self.normalize_email(email), nickname=nickname)
+        user.is_active = True
+        user.save()
+        return user
             
     def create_superuser(self, email=None, nickname=None, password=None, **kwargs):
         user = self.create_user(email=email, nickname=nickname, password=password, **kwargs)
