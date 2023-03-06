@@ -33,6 +33,7 @@ DJANGO_APPS = [
 DEPENDENCIES = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "corsheaders",
 ]
 
 INSTALLED_APPS = [
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 ] + DEPENDENCIES + DJANGO_APPS
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,6 +125,12 @@ MITI_URLS = {
         },
     },
 }
+
+
+CORS_ORIGIN_WHIELIST = [
+    "http://localhost:3000",
+]
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Internationalization
